@@ -15,6 +15,7 @@ pipeline {
 
     stage('Deploy mysql cluster') {
       steps {
+        sh 'kubectl create secret generic mysql-password-secret --from-literal=rootpassword=$MYSQL_ROOT_PASSWORD'
         sh 'kubectl apply -k k8s'
       }
     }

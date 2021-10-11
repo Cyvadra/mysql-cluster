@@ -33,6 +33,10 @@ spec:
             configMapKeyRef:
               name: system-environment
               key: environment.consul_port
+        - name: MYSQL_ROOT_PASSWORD
+          valueFrom:
+            name: mysql-password-secret
+            key: rootpassword
         command:
         - bash
         - "-c"
@@ -83,8 +87,6 @@ spec:
       - name: mysql
         image: mysql:5.7
         env:
-        - name: MYSQL_ALLOW_EMPTY_PASSWORD
-          value: "1"
         - name: ENV_ENVIRONMENT_TARGET
           valueFrom:
             configMapKeyRef:
@@ -100,6 +102,10 @@ spec:
             configMapKeyRef:
               name: system-environment
               key: environment.consul_port
+        - name: MYSQL_ROOT_PASSWORD
+          valueFrom:
+            name: mysql-password-secret
+            key: rootpassword
         ports:
         - name: mysql
           containerPort: 3306
@@ -164,7 +170,7 @@ spec:
                   -e "$(<change_master_to.sql.in), \
                           MASTER_HOST='mysql-0.mysql', \
                           MASTER_USER='root', \
-                          MASTER_PASSWORD='', \
+                          MASTER_PASSWORD='${MYSQL_ROOT_PASSWORD}', \
                           MASTER_CONNECT_RETRY=10; \
                         START SLAVE;" || exit 1
             # In case of container restart, attempt this at-most-once.
