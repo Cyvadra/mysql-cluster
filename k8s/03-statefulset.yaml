@@ -35,8 +35,9 @@ spec:
               key: environment.consul_port
         - name: MYSQL_ROOT_PASSWORD
           valueFrom:
-            name: mysql-password-secret
-            key: rootpassword
+            secretKeyRef:
+              name: mysql-password-secret
+              key: rootpassword
         command:
         - bash
         - "-c"
@@ -104,8 +105,9 @@ spec:
               key: environment.consul_port
         - name: MYSQL_ROOT_PASSWORD
           valueFrom:
-            name: mysql-password-secret
-            key: rootpassword
+            secretKeyRef:
+              name: mysql-password-secret
+              key: rootpassword
         ports:
         - name: mysql
           containerPort: 3306
