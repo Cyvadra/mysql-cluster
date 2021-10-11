@@ -21,17 +21,17 @@ spec:
         - name: ENV_ENVIRONMENT_TARGET
           valueFrom:
             configMapKeyRef:
-              name: system-configmap
+              name: system-environment
               key: environment.target
         - name: ENV_CONSUL_HOST
           valueFrom:
             configMapKeyRef:
-              name: system-configmap
+              name: system-environment
               key: environment.consul_host
         - name: ENV_CONSUL_PORT
           valueFrom:
             configMapKeyRef:
-              name: system-configmap
+              name: system-environment
               key: environment.consul_port
         command:
         - bash
@@ -56,7 +56,8 @@ spec:
         - name: config-map
           mountPath: /mnt/config-map
       - name: clone-mysql
-        image: gcr.io/google-samples/xtrabackup:1.0
+        # image: gcr.io/google-samples/xtrabackup:1.0
+        image: ist0ne/xtrabackup:1.0
         command:
         - bash
         - "-c"
@@ -111,7 +112,8 @@ spec:
           periodSeconds: 2
           timeoutSeconds: 1
       - name: xtrabackup
-        image: gcr.io/google-samples/xtrabackup:1.0
+        # image: gcr.io/google-samples/xtrabackup:1.0
+        image: ist0ne/xtrabackup:1.0
         ports:
         - name: xtrabackup
           containerPort: 3307
@@ -172,7 +174,7 @@ spec:
         emptyDir: {}
       - name: config-map
         configMap:
-          name: mysql
+          name: mysql-configmap
   volumeClaimTemplates:
   - metadata:
       name: data
