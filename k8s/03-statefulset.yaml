@@ -17,6 +17,7 @@ spec:
       initContainers:
       - name: init-mysql
         image: entropypool/mysql:5.7
+        imagePullPolicy: Always
         env:
         - name: ENV_ENVIRONMENT_TARGET
           valueFrom:
@@ -95,6 +96,7 @@ spec:
       containers:
       - name: mysql
         image: entropypool/mysql:5.7
+        imagePullPolicy: Always
         env:
         - name: ENV_ENVIRONMENT_TARGET
           valueFrom:
