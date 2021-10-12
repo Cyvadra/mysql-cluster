@@ -44,6 +44,11 @@ spec:
             secretKeyRef:
               name: mysql-password-secret
               key: rootpassword
+        - name: MYSQL_PWD
+          valueFrom:
+            secretKeyRef:
+              name: mysql-password-secret
+              key: rootpassword
         command:
         - bash
         - "-c"
@@ -120,6 +125,11 @@ spec:
             secretKeyRef:
               name: mysql-password-secret
               key: rootpassword
+        - name: MYSQL_PWD
+          valueFrom:
+            secretKeyRef:
+              name: mysql-password-secret
+              key: rootpassword
         ports:
         - name: mysql
           containerPort: 3306
@@ -142,7 +152,7 @@ spec:
         readinessProbe:
           exec:
             # Check we can execute queries over TCP (skip-networking is off).
-            command: ["mysql", "-h", "127.0.0.1", "-uroot", "-p$MYSQL_ROOT_PASSWORD", "-e", "SELECT 1"]
+            command: ["mysql", "-h", "127.0.0.1", "-uroot", "-e", "SELECT 1"]
           initialDelaySeconds: 5
           periodSeconds: 2
           timeoutSeconds: 1
@@ -177,7 +187,7 @@ spec:
           # Check if we need to complete a clone by starting replication.
           if [[ -f change_master_to.sql.in ]]; then
             echo "Waiting for mysqld to be ready (accepting connections)"
-            until mysql -h 127.0.0.1 -uroot -p$MYSQL_ROOT_PASSWORD -e "SELECT 1"; do sleep 1; done
+            until mysql -h 127.0.0.1 -uroot -e "SELECT 1"; do sleep 1; done
 
             echo "Initializing replication from clone position"
             mysql -h 127.0.0.1 \
