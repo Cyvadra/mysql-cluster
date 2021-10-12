@@ -13,13 +13,33 @@ pipeline {
       }
     }
 
+    stage('Build mysql image') {
+      when {
+        expression { BUILD_TARGET == 'true' }
+      }
+      steps {
+        sh 'docker build . -t entropypool/mysql:5.7'
+      }
+    }
+
+    stage('Release mysql image') {
+      when {
+        expression { RELEASE_TARGET == 'true' }
+      }
+      steps {
+        sh 'docker push entropypool/mysql:5.7'
+      }
+    }
+
     stage('Deploy mysql cluster') {
+      when {
+        expression { DEPLOY_TARGET == 'true' }
+      }
       steps {
         sh 'kubectl create secret generic mysql-password-secret --from-literal=rootpassword=$MYSQL_ROOT_PASSWORD --namespace kube-system'
         sh 'kubectl apply -k k8s'
       }
     }
-
   }
   post('Report') {
     fixed {
