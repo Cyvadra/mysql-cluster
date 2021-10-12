@@ -6,8 +6,4 @@ if [ ! $? -eq 0 ]; then
   exit 1
 fi
 
-echo "CREATE USER 'root'@'%' IDENTIFIED BY '${MYSQL_ROOT_PASSWORD}';" > /docker-entrypoint-initdb.d/init.sql
-echo "GRANT ALL PRIVILEGES ON *.* TO 'root'@'%' IDENTIFIED BY '${MYSQL_ROOT_PASSWORD}' WITH GRANT OPTION;" >> /docker-entrypoint-initdb.d/init.sql
-echo "FLUSH PRIVILEGES;" >> /docker-entrypoint-initdb.d/init.sql
-
 /usr/local/bin/docker-entrypoint-inner.sh $@
