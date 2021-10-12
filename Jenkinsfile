@@ -18,7 +18,7 @@ pipeline {
         expression { BUILD_TARGET == 'true' }
       }
       steps {
-        sh 'docker build . -t entropypool/mysql:5.7'
+        sh 'docker build -t entropypool/mysql:5.7 .'
       }
     }
 
