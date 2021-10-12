@@ -17,6 +17,7 @@ spec:
       initContainers:
       - name: init-mysql
         image: entropypool/mysql:5.7
+        # image: mysql:5.7
         imagePullPolicy: Always
         env:
         - name: ENV_ENVIRONMENT_TARGET
@@ -38,10 +39,6 @@ spec:
           valueFrom:
             fieldRef:
               fieldPath: metadata.namespace
-        - name: ENV_SERVICE_NAME
-          valueFrom:
-            fieldRef:
-              fieldPath: spec.serviceName
         - name: MYSQL_ROOT_PASSWORD
           valueFrom:
             secretKeyRef:
@@ -96,6 +93,7 @@ spec:
       containers:
       - name: mysql
         image: entropypool/mysql:5.7
+        # image: mysql:5.7
         imagePullPolicy: Always
         env:
         - name: ENV_ENVIRONMENT_TARGET
@@ -117,10 +115,6 @@ spec:
           valueFrom:
             fieldRef:
               fieldPath: metadata.namespace
-        - name: ENV_SERVICE_NAME
-          valueFrom:
-            fieldRef:
-              fieldPath: spec.serviceName
         - name: MYSQL_ROOT_PASSWORD
           valueFrom:
             secretKeyRef:
@@ -223,4 +217,4 @@ spec:
       accessModes: ["ReadWriteOnce"]
       resources:
         requests:
-          storage: 10Gi
+          storage: 1Gi
