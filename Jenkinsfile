@@ -18,6 +18,7 @@ pipeline {
         expression { BUILD_TARGET == 'true' }
       }
       steps {
+        sh 'mkdir -p .docker-tmp; cp /usr/bin/consul .docker-tmp'
         sh 'docker build -t entropypool/mysql:5.7 .'
       }
     }
