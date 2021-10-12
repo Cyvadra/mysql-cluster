@@ -1,4 +1,4 @@
-mysql:5.7
+FROM mysql:5.7
 
 RUN mkdir -p /usr/local/bin
 RUN mv docker-entrypoint.sh /usr/local/bin/docker-entrypoint-inner.sh
