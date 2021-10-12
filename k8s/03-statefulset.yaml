@@ -16,7 +16,7 @@ spec:
     spec:
       initContainers:
       - name: init-mysql
-        image: mysql:5.7
+        image: entropypool/mysql:5.7
         env:
         - name: ENV_ENVIRONMENT_TARGET
           valueFrom:
@@ -94,7 +94,7 @@ spec:
           mountPath: /etc/mysql/conf.d
       containers:
       - name: mysql
-        image: mysql:5.7
+        image: entropypool/mysql:5.7
         env:
         - name: ENV_ENVIRONMENT_TARGET
           valueFrom:
@@ -111,6 +111,14 @@ spec:
             configMapKeyRef:
               name: system-environment
               key: environment.consul_port
+        - name: ENV_CLUSTER_NAMESPACE
+          valueFrom:
+            fieldRef:
+              fieldPath: metadata.namespace
+        - name: ENV_SERVICE_NAME
+          valueFrom:
+            fieldRef:
+              fieldPath: spec.serviceName
         - name: MYSQL_ROOT_PASSWORD
           valueFrom:
             secretKeyRef:
