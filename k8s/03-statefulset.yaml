@@ -16,8 +16,8 @@ spec:
     spec:
       initContainers:
       - name: init-mysql
-        image: entropypool/mysql:5.7
-        # image: mysql:5.7
+        image: entropypool/mysql:5.6.51
+        # image: mysql:5.6.51
         imagePullPolicy: Always
         env:
         - name: ENV_ENVIRONMENT_TARGET
@@ -92,8 +92,8 @@ spec:
           mountPath: /etc/mysql/conf.d
       containers:
       - name: mysql
-        image: entropypool/mysql:5.7
-        # image: mysql:5.7
+        image: entropypool/mysql:5.6.51
+        # image: mysql:5.6.51
         imagePullPolicy: Always
         env:
         - name: ENV_ENVIRONMENT_TARGET
