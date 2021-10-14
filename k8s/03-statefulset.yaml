@@ -146,7 +146,10 @@ spec:
         readinessProbe:
           exec:
             # Check we can execute queries over TCP (skip-networking is off).
-            command: ["mysql", "-h", "127.0.0.1", "-uroot", "-e", "SELECT 1"]
+            command:
+              - sh
+              - -c
+              - MYSQL_PWD=$MYSQL_ROOT_PASSWORD mysql -h 127.0.0.1 -uroot -e "SELECT 1"
           initialDelaySeconds: 60
           periodSeconds: 2
           timeoutSeconds: 1
@@ -156,6 +159,12 @@ spec:
         ports:
         - name: xtrabackup
           containerPort: 3307
+        env:
+        - name: MYSQL_ROOT_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: mysql-password-secret
+              key: rootpassword
         command:
         - bash
         - "-c"
@@ -181,10 +190,10 @@ spec:
           # Check if we need to complete a clone by starting replication.
           if [[ -f change_master_to.sql.in ]]; then
             echo "Waiting for mysqld to be ready (accepting connections)"
-            until mysql -h 127.0.0.1 -uroot -e "SELECT 1"; do sleep 1; done
+            until MYSQL_PWD=$MYSQL_ROOT_PASSWORD mysql -h 127.0.0.1 -uroot -e "SELECT 1"; do sleep 1; done
 
             echo "Initializing replication from clone position"
-            mysql -h 127.0.0.1 \
+            MYSQL_PWD=$MYSQL_ROOT_PASSWORD mysql -h 127.0.0.1 \
                   -e "$(<change_master_to.sql.in), \
                           MASTER_HOST='mysql-0.mysql', \
                           MASTER_USER='root', \
