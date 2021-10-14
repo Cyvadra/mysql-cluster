@@ -37,7 +37,10 @@ pipeline {
         expression { DEPLOY_TARGET == 'true' }
       }
       steps {
-        sh 'kubectl create secret generic mysql-password-secret --from-literal=rootpassword=$MYSQL_ROOT_PASSWORD --namespace kube-system'
+        sh (returnStdout: true, script: '''
+          export MYSQL_ROOT_PASSWORD=$MYSQL_ROOT_PASSWORD
+          envsubst < k8s/secret.yaml | kubectl apply -f -
+        '''.stripIndent())
         sh 'kubectl apply -k k8s'
       }
     }
