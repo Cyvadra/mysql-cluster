@@ -44,11 +44,8 @@ spec:
             secretKeyRef:
               name: mysql-password-secret
               key: rootpassword
-        - name: MYSQL_PWD
-          valueFrom:
-            secretKeyRef:
-              name: mysql-password-secret
-              key: rootpassword
+        - name: MYSQL_ROOT_HOST
+          value: "%"
         command:
         - bash
         - "-c"
@@ -125,11 +122,8 @@ spec:
             secretKeyRef:
               name: mysql-password-secret
               key: rootpassword
-        - name: MYSQL_PWD
-          valueFrom:
-            secretKeyRef:
-              name: mysql-password-secret
-              key: rootpassword
+        - name: MYSQL_ROOT_HOST
+          value: "%"
         ports:
         - name: mysql
           containerPort: 3306
