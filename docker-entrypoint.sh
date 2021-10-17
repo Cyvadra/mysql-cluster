@@ -13,20 +13,24 @@ register_address="mysql.$ENV_CLUSTER_NAMESPACE.svc.cluster.local"
 
 loop_registry () {
   prev_state=-1
+  echo "."
   while true; do
     address_is_ro=$(mysql --defaults-extra-file=~/.my.cnf -e "SELECT @@global.super_read_only;" | tail -n1)
     if [ ! $? -eq 0 ]; then
-      echo "whatever... didn't register"
-      break
+      echo "didn't register"
+      exit 1
     fi
     if [[ ! $address_is_ro -eq $prev_state ]]; then
       if [[ $address_is_ro -eq 1 ]]; then
+        echo "-- register as main"
         consul services register -address=$register_address -name="mysql.npool.top" -port=3306
       else
+        echo "-- register as ro"
         consul services register -address=$register_address -name="mysql-ro.npool.top" -port=3306
       fi
       if [ ! $? -eq 0 ]; then
         echo "\nFAIL TO REGISTER ME TO CONSUL\n"
+        exit 1
       fi
       prev_state=$address_is_ro
     fi
