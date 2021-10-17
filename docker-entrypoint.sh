@@ -24,6 +24,10 @@ prev_state=-1
 
 while true; do
   address_is_ro=$(mysql --defaults-extra-file=~/.my.cnf -e "SELECT @@global.super_read_only;" | tail -n1)
+  if [ ! $? -eq 0 ]; then
+    echo "whatever..."
+    break
+  fi
   if [[ ! $address_is_ro -eq $prev_state ]]; then
     do_registry $address_is_ro
     if [ ! $? -eq 0 ]; then
