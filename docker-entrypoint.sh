@@ -1,5 +1,7 @@
 #!/bin/bash
 
+echo "INSIDE docker-entrypoint.sh ----"
+
 export CONSUL_HTTP_ADDR=${ENV_CONSUL_HOST}:${ENV_CONSUL_PORT}
 touch ~/.my.cnf
 echo "[client]
@@ -21,7 +23,7 @@ do_registry () {
 prev_state=-1
 
 while true; do
-  address_is_ro=$(mysql -e "SELECT @@global.super_read_only;" | tail -n1)
+  address_is_ro=$(mysql --defaults-extra-file=~/.my.cnf -e "SELECT @@global.super_read_only;" | tail -n1)
   if [[ ! $address_is_ro -eq $prev_state ]]; then
     do_registry $address_is_ro
     if [ ! $? -eq 0 ]; then
@@ -30,7 +32,7 @@ while true; do
     prev_state=$address_is_ro
   fi
   echo $address_is_ro
-  sleep 1
+  sleep 2
 done
 
 
