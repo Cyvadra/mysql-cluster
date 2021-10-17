@@ -22,11 +22,11 @@ loop_registry () {
     fi
     if [[ ! $address_is_ro -eq $prev_state ]]; then
       if [[ $address_is_ro -eq 1 ]]; then
-        echo "-- register as main"
-        consul services register -address=$register_address -name="mysql.npool.top" -port=3306
-      else
-        echo "-- register as ro"
+        echo "\n -- register as ro \n"
         consul services register -address=$register_address -name="mysql-ro.npool.top" -port=3306
+      else
+        echo "\n -- register as main \n"
+        consul services register -address=$register_address -name="mysql.npool.top" -port=3306
       fi
       if [ ! $? -eq 0 ]; then
         echo "\nFAIL TO REGISTER ME TO CONSUL\n"
@@ -34,7 +34,6 @@ loop_registry () {
       fi
       prev_state=$address_is_ro
     fi
-    echo $address_is_ro
     sleep 2
   done
 }
