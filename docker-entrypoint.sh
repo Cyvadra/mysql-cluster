@@ -21,9 +21,9 @@ loop_registry () {
     fi
     if [[ ! $address_is_ro -eq $prev_state ]]; then
       if [[ $address_is_ro -eq 1 ]]; then
-        consul services register -address=$register_address -name=mysql.npool.top -port=3306
+        consul services register -address=$register_address -name="mysql.npool.top" -port=3306
       else
-        consul services register -address=$register_address -name=mysql-ro.npool.top -port=3306
+        consul services register -address=$register_address -name="mysql-ro.npool.top" -port=3306
       fi
       if [ ! $? -eq 0 ]; then
         echo "\nFAIL TO REGISTER ME TO CONSUL\n"
@@ -36,8 +36,5 @@ loop_registry () {
 }
 
 
-
-/usr/local/bin/docker-entrypoint-inner.sh $@
-
-
 loop_registry&
+/usr/local/bin/docker-entrypoint-inner.sh $@
