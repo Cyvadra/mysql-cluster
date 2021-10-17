@@ -9,15 +9,14 @@ user=root
 password=$MYSQL_ROOT_PASSWORD" > ~/.my.cnf
 chmod 600 ~/.my.cnf
 
+register_address="mysql.$ENV_CLUSTER_NAMESPACE.svc.cluster.local"
+
 do_registry () {
   if [[ "$1"=="0" ]]; then
-    register_address="mysql-main.$ENV_CLUSTER_NAMESPACE.svc.cluster.local"
+    consul services register -address=$register_address -name=mysql.npool.top -port=3306
   else
-    register_address="mysql-ro.$ENV_CLUSTER_NAMESPACE.svc.cluster.local"
+    consul services register -address=$register_address -name=mysql-ro.npool.top -port=3306
   fi
-  echo $register_address
-  consul services deregister -address=$register_address -name=mysql.npool.top -port=3306 || true
-  consul services register -address=$register_address -name=mysql.npool.top -port=3306
 }
 
 prev_state=-1
